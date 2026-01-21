@@ -64,17 +64,42 @@ describe('generateSBOMForOrg', () => {
     await createRepoList(token, owner, repo, <any>octokit)
 
     expect(octokit.paginate).toHaveBeenCalledWith('GET /orgs/{owner}/repos', {
-        owner,
-        headers: {
-          'X-GitHub-Api-Version': '2022-11-28'
-        }
+      owner,
+      headers: {
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
     })
-    
+
     // TODO: this fails b/c no repos are returned in the above mock
     expect(fs.writeFile).toHaveBeenCalledWith(
       `sbom-${owner}-*.json`,
       JSON.stringify(mockSBOM),
       expect.any(Function)
     )
+
+    // const octokit = new Octokit()
+    // ;(<any>octokit.paginate(octokit.rest.repos.listForOrg)).rest.repos.listForOrg = jest.fn().mockResolvedValue({
+    //   data: {
+    //     repos: mockRepos
+    //   }
+    // })
+
+    // console.log(`this is org: ${owner}`)
+    // console.log(`this is repo ${repo}`)
+
+    // // await generateSBOM(owner, repo, <any>octokit, 'repo')
+    // await createRepoList(token, owner, repo, <any>octokit)
+
+    // expect(octokit.paginate(octokit.rest.repos.listForOrg)).toHaveBeenCalledWith(
+    //   {
+    //     org: owner,
+    //   }
+    // )
+
+    // expect(fs.writeFile).toHaveBeenCalledWith(
+    //   `sbom-${owner}-${repo}.json`,
+    //   JSON.stringify(mockRepos),
+    //   expect.any(Function)
+    // )
   })
 })
